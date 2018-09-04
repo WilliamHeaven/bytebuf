@@ -18,6 +18,26 @@ buf.WriteString("123")
 buf.Write([]byte("456")
 ```
 
+## Implementation difference
+
+The whole implementation difference can be described as:
+
+```diff
+type Buffer struct {
+	buf       []byte   // contents are the bytes buf[off : len(buf)]
+	off       int      // read at &buf[off], write at &buf[len(buf)]
+- 	bootstrap [64]byte // memory to hold first slice; helps small buffers avoid allocation.
++ 	bootstrap *[64]byte // memory to hold first slice; helps small buffers avoid allocation.
+	lastRead  readOp   // last read operation, so that Unread* can work correctly.
+}
+```
+
+With updated escape analysis, it's possible to actually take benefits of
+bootstrap array, but only if it's not "inlined" into `Buffer` object.
+So, we need a pointer to array instead of normal array.
+
+This makes it impossible to use zero value though, hence `New` function.
+
 ## Performance
 
 Given this code:
