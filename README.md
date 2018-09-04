@@ -1,3 +1,8 @@
+## bytebuf
+
+Replacement for `bytes.Buffer` that you can use in a performace-sensitive parts
+or your Go programs.
+
 ## Performance
 
 Given this code:
