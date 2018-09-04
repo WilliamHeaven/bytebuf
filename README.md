@@ -3,6 +3,21 @@
 Replacement for `bytes.Buffer` that you can use in a performace-sensitive parts
 or your Go programs.
 
+## Quick start / Installation
+
+```bash
+go get -u github.com/intel-go/bytebuf
+```
+
+The only difference from `bytes.Buffer` is explicit constructor:
+
+```go
+buf := bytebuf.New() // Can't just use zero value
+// Now can use as an ordinary bytes.Buffer:
+buf.WriteString("123")
+buf.Write([]byte("456")
+```
+
 ## Performance
 
 Given this code:
