@@ -40,7 +40,8 @@ This makes it impossible to use zero value though, hence `New` function.
 Unfortunately, it means that we can't merge this into golang `bytes` package,
 it would be a breaking change in package API.
 
-If you're interested in bootstrap array problem, take a look at https://github.com/golang/go/issues/7921.
+If you're interested in bootstrap array problem, take a look at
+[cmd/compile, bytes: bootstrap array causes bytes.Buffer to always be heap-allocated](https://github.com/golang/go/issues/7921).
 
 ## Performance
 
