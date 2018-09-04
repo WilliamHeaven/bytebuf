@@ -1,6 +1,6 @@
 ## bytebuf
 
-Replacement for `bytes.Buffer` that you can use in a performace-sensitive parts
+Replacement for [bytes.Buffer](https://golang.org/pkg/bytes/#Buffer) that you can use in a performace-sensitive parts
 or your Go programs.
 
 ## Quick start / Installation
