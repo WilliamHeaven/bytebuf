@@ -23,6 +23,7 @@ type Buffer struct {
 	// sharing.
 }
 
+// New returns ready-to-use empty Buffer.
 func New() Buffer {
 	return Buffer{bootstrap: new([64]byte)}
 }
