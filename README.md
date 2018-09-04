@@ -3,6 +3,8 @@
 Replacement for [bytes.Buffer](https://golang.org/pkg/bytes/#Buffer) that you can use in a performace-sensitive parts
 or your Go programs.
 
+For explanation why this package is needed, see [rationale](#implementation-difference--rationale).
+
 ## Quick start / Installation
 
 ```bash
@@ -17,31 +19,6 @@ buf := bytebuf.New() // Can't just use zero value
 buf.WriteString("123")
 buf.Write([]byte("456")
 ```
-
-## Implementation difference / Rationale
-
-The whole implementation difference can be described as:
-
-```diff
-type Buffer struct {
-	buf       []byte   // contents are the bytes buf[off : len(buf)]
-	off       int      // read at &buf[off], write at &buf[len(buf)]
-- 	bootstrap [64]byte // memory to hold first slice; helps small buffers avoid allocation.
-+ 	bootstrap *[64]byte // memory to hold first slice; helps small buffers avoid allocation.
-	lastRead  readOp   // last read operation, so that Unread* can work correctly.
-}
-```
-
-With updated escape analysis, it's possible to actually take benefits of
-bootstrap array, but only if it's not "inlined" into `Buffer` object.
-So, we need a pointer to array instead of normal array.
-
-This makes it impossible to use zero value though, hence `New` function.
-Unfortunately, it means that we can't merge this into golang `bytes` package,
-it would be a breaking change in package API.
-
-If you're interested in bootstrap array problem, take a look at
-[cmd/compile, bytes: bootstrap array causes bytes.Buffer to always be heap-allocated](https://github.com/golang/go/issues/7921).
 
 ## Performance
 
@@ -84,3 +61,28 @@ String/64-8         2.00 ± 0%      1.00 ± 0%   -50.00%  (p=0.000 n=10+10)
 String/128-8        3.00 ± 0%      2.00 ± 0%   -33.33%  (p=0.000 n=10+10)
 String/1024-8       3.00 ± 0%      2.00 ± 0%   -33.33%  (p=0.000 n=10+10)
 ```
+
+## Implementation difference / Rationale
+
+The whole implementation difference can be described as:
+
+```diff
+type Buffer struct {
+	buf       []byte   // contents are the bytes buf[off : len(buf)]
+	off       int      // read at &buf[off], write at &buf[len(buf)]
+- 	bootstrap [64]byte // memory to hold first slice; helps small buffers avoid allocation.
++ 	bootstrap *[64]byte // memory to hold first slice; helps small buffers avoid allocation.
+	lastRead  readOp   // last read operation, so that Unread* can work correctly.
+}
+```
+
+With updated escape analysis, it's possible to actually take benefits of
+bootstrap array, but only if it's not "inlined" into `Buffer` object.
+So, we need a pointer to array instead of normal array.
+
+This makes it impossible to use zero value though, hence `New` function.
+Unfortunately, it means that we can't merge this into golang `bytes` package,
+it would be a breaking change in package API.
+
+If you're interested in bootstrap array problem, take a look at
+[cmd/compile, bytes: bootstrap array causes bytes.Buffer to always be heap-allocated](https://github.com/golang/go/issues/7921).
