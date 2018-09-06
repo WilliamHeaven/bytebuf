@@ -62,7 +62,7 @@ String/128-8        3.00 ± 0%      2.00 ± 0%   -33.33%  (p=0.000 n=10+10)
 String/1024-8       3.00 ± 0%      2.00 ± 0%   -33.33%  (p=0.000 n=10+10)
 ```
 
-Note: it requres [CL133375](https://golang.org/cl/133375) to be applied to your Go compiler.
+Note: it requires [CL133375](https://golang.org/cl/133375) to be applied to your Go compiler.
 
 ## Implementation difference / Rationale
 
