@@ -5,6 +5,17 @@ or your Go programs.
 
 For explanation why this package is needed, see [rationale](#implementation-difference--rationale).
 
+## Disclaimer
+
+This is an experiment and can lead to a better `bytes.Buffer` from the standard library.
+
+Main points:
+
+1. Give some attention to an old [cmd/compile, bytes: bootstrap array causes bytes.Buffer to always be heap-allocated](https://github.com/golang/go/issues/7921) issue.
+2. Give a rationale for [CL133375 cmd/compile/internal/gc: handle array slice self-assign in esc.go](https://golang.org/cl/133375).
+
+You might still use `bytebuf` as it could be faster in some scenarios, but keep an eye on the benchmarks against `bytes.Buffer` provided here and run some on your own machine. If it gives no advantages for you, just stick to the `bytes.Buffer`.
+
 ## Quick start / Installation
 
 ```bash
