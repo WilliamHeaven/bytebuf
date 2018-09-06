@@ -10,15 +10,10 @@ import (
 var sinkString string
 
 func BenchmarkString(b *testing.B) {
-	args := []string{
-		"",
-		"Intel",
-		strings.Repeat("x", 64),
-		strings.Repeat("x", 128),
-		strings.Repeat("x", 1024),
-	}
+	sizes := []int{0, 5, 64, 1024}
 
-	for _, arg := range args {
+	for _, size := range sizes {
+		arg := strings.Repeat("x", size)
 		name := "empty"
 		if arg != "" {
 			name = fmt.Sprint(len(arg))
@@ -33,7 +28,7 @@ func BenchmarkString(b *testing.B) {
 		})
 		b.Run("bytes.Buffer/"+name, func(b *testing.B) {
 			for i := 0; i < b.N; i++ {
-				var buf bytes.Buffer
+				buf := bytes.NewBuffer(make([]byte, 0, 64))
 				buf.WriteString(arg)
 				sinkString = buf.String()
 			}
