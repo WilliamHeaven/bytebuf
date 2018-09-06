@@ -17,7 +17,7 @@ The only difference from `bytes.Buffer` is explicit constructor:
 buf := bytebuf.New() // Can't just use zero value
 // Now can use as an ordinary bytes.Buffer:
 buf.WriteString("123")
-buf.Write([]byte("456")
+buf.Write([]byte("456"))
 ```
 
 ## Performance
