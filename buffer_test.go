@@ -35,3 +35,35 @@ func BenchmarkString(b *testing.B) {
 		})
 	}
 }
+
+func BenchmarkStringPointerBuffer(b *testing.B) {
+	args := []string{
+		"",
+		"Intel",
+		strings.Repeat("x", 64),
+		strings.Repeat("x", 128),
+		strings.Repeat("x", 1024),
+	}
+
+	for _, arg := range args {
+		name := "empty"
+		if arg != "" {
+			name = fmt.Sprint(len(arg))
+		}
+
+		b.Run("bytebuf.Buffer/"+name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				buf := NewPointer()
+				buf.WriteString(arg)
+				sinkString = buf.String()
+			}
+		})
+		b.Run("bytes.Buffer/"+name, func(b *testing.B) {
+			for i := 0; i < b.N; i++ {
+				buf := new(bytes.Buffer)
+				buf.WriteString(arg)
+				sinkString = buf.String()
+			}
+		})
+	}
+}

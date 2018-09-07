@@ -28,6 +28,11 @@ func New() Buffer {
 	return Buffer{bootstrap: new([64]byte)}
 }
 
+// NewPointer returns ready-to-use empty *Buffer.
+func NewPointer() *Buffer {
+	return &Buffer{bootstrap: new([64]byte)}
+}
+
 // The readOp constants describe the last action performed on
 // the buffer, so that UnreadRune and UnreadByte can check for
 // invalid usage. opReadRuneX constants are chosen such that
