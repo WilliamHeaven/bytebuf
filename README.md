@@ -1,5 +1,7 @@
 ## bytebuf
 
+UPDATE: This implementation is deprecated as the patch is merged to the Go mainline (https://golang.org/cl/133715)
+
 Example of how [CL133375 cmd/compile/internal/gc: handle array slice self-assign in esc.go](https://golang.org/cl/133375)
 can be utilized to mitigate Go escape analysis limitations.
 
